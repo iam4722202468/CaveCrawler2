@@ -1,5 +1,6 @@
 import pygame
 import forms
+import glob
 
 def searchImageCache(imageName, imageCache):
 	for x in imageCache:
@@ -8,6 +9,17 @@ def searchImageCache(imageName, imageCache):
 	
 	imageCache.append([pygame.image.load(imageName).convert_alpha(), imageName]) #this doesn't actually add it...
 	return imageCache[-1][0]
+
+def getSpriteName(imageNumber):
+	return glob.glob("./sprites/*")[imageNumber]
+
+def getSpriteInfo(fileName):
+	with open(fileName) as f:
+		currentSpriteInfo = {}
+		for x in f.read().splitlines():
+			thisLine = x.split(": ")
+			currentSpriteInfo[thisLine[0]] = thisLine[1]
+	return currentSpriteInfo
 
 def getViewTile(mainMaps, sprite, imageData, imageCache, panelSize, layerNumber):
 	panelSize -= 2
@@ -27,7 +39,7 @@ def getViewTile(mainMaps, sprite, imageData, imageCache, panelSize, layerNumber)
 	elif layerNumber == 3: #show both
 		startLayer = 0
 		endLayer = 2
-	
+		
 	for x in xrange(startLayer, endLayer):
 		if mainMaps[x] != '0':
 			tileInfo = mainMaps[x].split(":")
@@ -53,7 +65,13 @@ def getViewTile(mainMaps, sprite, imageData, imageCache, panelSize, layerNumber)
 			tempSurface = pygame.transform.scale(tempSurface, (panelSize, int((gameBlockY/float(gameBlockX))*panelSize)))
 			
 			tileSurface.blit(tempSurface, (0,0), (0, 0, panelSize, panelSize))
-			
+	
+	if sprite != '0' and (layerNumber == 2 or layerNumber == 3):
+		spriteInfo = getSpriteInfo(sprite)
+		tempSurface = getSpriteTile(spriteInfo, imageCache)
+		tempSurface = pygame.transform.scale(tempSurface, (panelSize, int((int(spriteInfo['sizeY'])/float(int(spriteInfo['sizeX'])))*panelSize)))
+		tileSurface.blit(tempSurface, (0,0), (0, 0, panelSize, panelSize))
+		
 	return tileSurface
 
 def getTiles(spriteSize, spriteMapName, imageCache):
@@ -74,9 +92,31 @@ def getTiles(spriteSize, spriteMapName, imageCache):
 	
 	return tileArray
 
-def getSprites(imageMap, imageData):
-	return
+def getSpriteTile(x, imageCache): #x is sprite info
+	thisSurface = pygame.Surface((int(x['sizeX']), int(x['sizeY'])), pygame.SRCALPHA, 32).convert_alpha()
+	spriteSheet = searchImageCache("../resources/" + x['spriteSheetPlace'], imageCache)
+		
+	placeInImage = x['spriteOrder'].split(",")[0]
+	tu = int(placeInImage) % (int(x['spriteSheetSizeX']) / int(x['sizeX']));
+	tv = int(placeInImage) / (int(x['spriteSheetSizeX']) / int(x['sizeX']));
+	
+	thisSurface.blit(spriteSheet, (0, 0), (tu*int(x['sizeX']), tv*int(x['sizeY']), int(x['sizeX']), int(x['sizeY'])))
+	return thisSurface
 
+def loadSpriteDisplay(imageCache):
+	tileArray = []
+	
+	for fileName in glob.glob("./sprites/*"):
+		x = getSpriteInfo(fileName)
+		tileArray.append(getSpriteTile(x, imageCache))
+		tileArray[-1] = pygame.transform.scale(tileArray[-1], (80, int(int(x['sizeX'])/float(int(x['sizeY']))*80)))
+	
+	return tileArray
+
+def generateMap(fileMap, imageData, imageCache):
+	print "generating map"
+	
+	
 def getThumbnail(fileMap, imageData, imageCache):
 	height = len(fileMap[0])
 	width = len(fileMap[0][0])

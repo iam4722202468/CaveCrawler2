@@ -30,6 +30,7 @@ bool GameMap::drawCurrentMap(std::vector<GameObject*> &gameObjects)
 	mapSprites->drawMap(gameObjects);
 }
 
+//create game map and mapSprites (which draws map)
 GameMap::GameMap(sf::RenderWindow &window) :
 	window(window)
 {

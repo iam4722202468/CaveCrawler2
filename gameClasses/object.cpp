@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "object.hpp"
 
+//controls movement of sprits
 MovingObject::MovingObject(sf::Sprite &sprite, int sizeX, int sizeY, int spriteSheetSizeX, int &currentSprite, int &addedX, int &addedY, int &placeX, int &placeY, std::vector<int> &spriteOrder, int &animatedSpeed, int animationNumber) :
 	sprite(sprite),
 	sizeX(sizeX),
@@ -78,6 +79,7 @@ bool MovingObject::updateMoving()
 	return false;
 }
 
+//create game object
 GameObject::GameObject(sf::RenderWindow& window, std::vector<GameObject*> &gameObjects, std::string classType, std::vector<std::vector<int>> &currentObjects, sf::Texture *spriteSheet, int placeX_, int placeY_, bool movable, bool solid, bool animated, bool selfMoving, bool moveWithKeys, bool wander, int movingSpaceX, int movingSpaceY, int movingDirection, int currentSprite_, int animatedSpeed_, int sizeX, int sizeY, int spriteSheetSizeX, int spriteSheetSizeY, std::vector<int> spriteOrder_, std::vector<int> path, std::vector<int> extraInfo) :
 	window(window),
 	gameObjects(gameObjects),

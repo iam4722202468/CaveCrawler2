@@ -27,6 +27,7 @@ bool GameController::getKeyPress(int keyValue)
 	return true;
 }
 
+//pass map to map object
 bool GameController::setMap(std::vector<std::vector<int>> &mapVector)
 {
 	currentMapObject->setMap(mapVector);
@@ -47,6 +48,7 @@ int GameController::findTexture(std::string textureName)
 	return -1;
 }
 
+//parse object info and create object
 bool GameController::generateObjects(std::vector<std::vector<std::string>> &objectInfo)
 {
 	for(int x = 0; x < currentMapObject->currentObjects.size(); x++)

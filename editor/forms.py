@@ -212,7 +212,7 @@ class createNewSprite(Frame):
 				if len(x) == 2:
 					stringToWrite += x[0]["text"] + ": " + x[1].get() + '\n'
 			
-			preset = ['path: -', 'extraInfo: -'] #don't forget spriteOrder
+			preset = ['path: -'] #don't forget spriteOrder
 			
 			for x in preset:
 				stringToWrite += x + '\n'
@@ -226,6 +226,9 @@ class createNewSprite(Frame):
 			
 			with open("./sprites/" + self.mapNameEntry.get(),"w+") as f:
 				f.write(stringToWrite)
+			
+			self.destroy()
+			self.quit()
 	
 	def createWidgets(self):
 		self.mapName = Label(self)
@@ -261,6 +264,8 @@ class createNewSprite(Frame):
 			
 			if x == "spriteOrder":
 				self.widgetArray[-1][1].insert(0, str(self.spriteImage))
+			elif x == "extraInfo":
+				self.widgetArray[-1][1].insert(0, "-")
 			else:
 				self.widgetArray[-1][1].insert(0, "0")
 			
@@ -288,7 +293,7 @@ class createNewSprite(Frame):
 		self.filePlace = filePlace
 		
 		self.objectValues = ['movable', 'solid', 'animated', 'selfMoving', 'moveWithKeys', 'wander']
-		self.objectValuesInt = ['movingSpaceX', 'movingSpaceY', 'movingDirection', 'currentSprite', 'animatedSpeed', 'spriteOrder']
+		self.objectValuesInt = ['movingSpaceX', 'movingSpaceY', 'movingDirection', 'currentSprite', 'animatedSpeed', 'spriteOrder', 'extraInfo']
 		
 		self.grid()
 		self.createWidgets()

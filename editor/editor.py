@@ -211,6 +211,14 @@ def drawLayerName(gameDisplay, showingLayer):
 	
 	copiedLabel = myfont.render("Currently copied: " + copiedInfo, 1, (255,255,255))
 	gameDisplay.blit(copiedLabel, (110, display_height - 20))
+	
+	if showingLayer == 3:
+		showingInfo = currentMap[0][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX] + "," + currentMap[1][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX] + "," + currentMap[2][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX]
+	else:
+		showingInfo = currentMap[showingLayer][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX]
+	
+	showingLabel = myfont.render("Currently showing: " + showingInfo, 1, (255,255,255))
+	gameDisplay.blit(showingLabel, (110, display_height - 46))
 
 def redrawScreen(gameDisplay, sectionSelected, selectedImage, startAt, imagePositions, imageData, fileList, thumbnails, displayingOnLeft, gridScale, gridPlaceX, gridPlaceY, currentMap, gridStartAtX, gridStartAtY, imageCache):
 	pygame.draw.rect(gameDisplay, (0,0,0), (0, 0, display_width, display_height))
@@ -219,7 +227,7 @@ def redrawScreen(gameDisplay, sectionSelected, selectedImage, startAt, imagePosi
 	
 	if displayingOnLeft == 0:
 		imagePositions = drawImages(gameDisplay, thumbnails, startAt, selectedImage, imagePositions, imageData, fileList)
-	elif displayingOnLeft == 1 or displayingOnLeft == 2:
+	elif displayingOnLeft == 1 or displayingOnLeft == 2 or displayingOnLeft == 3:
 		imagePositions = drawImages(gameDisplay, thumbnails, startAt, selectedImage, imagePositions, imageData, [])
 	
 	drawGrid(gameDisplay, gridScale, currentMap, gridStartAtX, gridStartAtY)
@@ -257,6 +265,9 @@ def saveCurrentMap(currentMap):
 	
 	f = open("./maps/" + currentMap[3] + "/layer", "w")
 	f.write('\n'.join([' '.join(row) for row in currentMap[1]]))
+	
+	f = open("./maps/" + currentMap[3] + "/objects", "w")
+	f.write('\n'.join([' '.join(row) for row in currentMap[2]]))
 
 def regenAllData():
 	global fileMapInfo
@@ -306,7 +317,7 @@ fileMapInfo = loadFiles()
 try:
 	currentMap = fileMapInfo[0]
 except:
-	currentMap = [[['0']],[['0']],[['0']]]
+	currentMap = [[['0']],[['0']],[['0']], "nomaploaded"]
 
 thumbnails = createSheetDisplay(fileList, imageCache)
 imagePositions = redrawScreen(gameDisplay, sectionSelected, selectedImage, startAt, imagePositions, imageData, fileList, thumbnails, displayingOnLeft, gridScale, gridPlaceX, gridPlaceY, currentMap, gridStartAtX, gridStartAtY, imageCache)
@@ -322,6 +333,8 @@ mainselectedImage = 0
 currentlyPressing = 0
 
 keyPressTime = 10
+
+hasSpriteSelected = False
 
 try:
 	while running:
@@ -367,12 +380,12 @@ try:
 				lastKeyPress = frameCounter
 			
 			if currentlyPressing  == pygame.K_DELETE:
-				if showingLayer == 0 or showingLayer == 1:
+				if showingLayer == 0 or showingLayer == 1 or showingLayer == 2:
 					currentMap[showingLayer][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX] = '0'
 					saveCurrentMap(currentMap)
 			
-			if currentlyPressing == pygame.K_v:
-				if showingLayer == 0 or showingLayer == 1:
+			elif currentlyPressing == pygame.K_v:
+				if (((showingLayer == 0 or showingLayer == 1) and not hasSpriteSelected) or (showingLayer == 2 and hasSpriteSelected)):
 					if copiedInfo != '0':
 						currentMap[showingLayer][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX] = copiedInfo
 						saveCurrentMap(currentMap)
@@ -383,53 +396,75 @@ try:
 					if showingLayer == 4:
 						showingLayer = 0
 					
-				if currentlyPressing == pygame.K_c:
-					if showingLayer == 0 or showingLayer == 1:
+				elif currentlyPressing == pygame.K_c:
+					if showingLayer == 0 or showingLayer == 1 or showingLayer == 2:
 						if currentMap[showingLayer][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX] != '0':
 							copiedInfo = currentMap[showingLayer][gridPlaceY+gridStartAtY][gridPlaceX+gridStartAtX]
+							if showingLayer == 2:
+								hasSpriteSelected = True
+							else:
+								hasSpriteSelected = False
 				
-				if currentlyPressing == pygame.K_KP_PLUS:
+				elif currentlyPressing == pygame.K_g:
+					generateMap()
+				
+				elif currentlyPressing == pygame.K_KP_PLUS:
 					if gridScale != 1:
 						gridScale -= 1
-				if currentlyPressing == pygame.K_KP_MINUS:
+				elif currentlyPressing == pygame.K_KP_MINUS:
 					gridScale += 1
 				
-				if currentlyPressing == pygame.K_UP:
+				elif currentlyPressing == pygame.K_UP:
 					if gridPlaceY == 0 and gridStartAtY != 0:
 						gridStartAtY -= 1
 					elif gridPlaceY != 0:
 						gridPlaceY -= 1
 				
-				if currentlyPressing == pygame.K_DOWN:
+				elif currentlyPressing == pygame.K_DOWN:
 					if gridPlaceY == gridScale-1 and gridStartAtY < len(currentMap[0]) - gridScale:
 						gridStartAtY += 1
 					elif gridPlaceY + gridStartAtY < len(currentMap[0]) -1:
 						gridPlaceY += 1
 				
-				if currentlyPressing == pygame.K_LEFT:
+				elif currentlyPressing == pygame.K_LEFT:
 					if gridPlaceX == 0 and gridStartAtX != 0:
 						gridStartAtX -= 1
 					elif gridPlaceX != 0:
 						gridPlaceX -= 1
-				if currentlyPressing == pygame.K_RIGHT:
+				elif currentlyPressing == pygame.K_RIGHT:
 					if gridPlaceX == gridScale-1 and gridStartAtX < len(currentMap[0][0]) - gridScale:
 						gridStartAtX += 1
 					elif gridPlaceX + gridStartAtX < len(currentMap[0][0]) -1:
 						gridPlaceX += 1
 				
-			if sectionSelected == 0: #check when left is selected, and on map load or sprite show
+			elif sectionSelected == 0: #check when left is selected, and on map load or sprite show
 				if currentlyPressing == pygame.K_UP:
 					if startAt != 0:
 						startAt -= 1
 					if selectedImage != 0:
 						selectedImage -= 1
-				if currentlyPressing == pygame.K_DOWN:
+				elif currentlyPressing == pygame.K_DOWN:
 					if startAt != len(thumbnails)-1:
 						startAt += 1
 					if selectedImage != len(thumbnails)-1:
 						selectedImage += 1
 				
-				if currentlyPressing == pygame.K_l:
+				elif currentlyPressing == pygame.K_s:
+					if displayingOnLeft == 0:
+						mainStartAt = startAt
+						mainSelectedImage = selectedImage
+						startAt = 0
+						selectedImage = 0
+						thumbnails = generatePreview.loadSpriteDisplay(imageCache)
+						
+						displayingOnLeft = 3
+					elif displayingOnLeft == 3:
+						displayingOnLeft = 0
+						startAt = mainStartAt
+						selectedImage = mainSelectedImage
+						thumbnails = createSheetDisplay(fileList, imageCache)
+					
+				elif currentlyPressing == pygame.K_l:
 					if displayingOnLeft == 0:
 						mainStartAt = startAt
 						mainSelectedImage = selectedImage
@@ -446,7 +481,18 @@ try:
 						selectedImage = mainSelectedImage
 						thumbnails = createSheetDisplay(fileList, imageCache)
 				
-				if displayingOnLeft == 1:
+				if displayingOnLeft == 0:
+					if currentlyPressing == pygame.K_RIGHT:
+						displayingOnLeft = 2
+						thumbnails = createSpriteDisplay(fileList[selectedImage], imageData, imageCache)
+						showingSpriteData = fileList[selectedImage]
+						
+						mainStartAt = startAt
+						mainSelectedImage = selectedImage
+						startAt = 0
+						selectedImage = 0
+						
+				elif displayingOnLeft == 1:
 					if currentlyPressing == pygame.K_RETURN:
 						currentMap = fileMapInfo[selectedImage]
 						
@@ -462,26 +508,19 @@ try:
 						selectedImage = mainSelectedImage
 						thumbnails = createSheetDisplay(fileList, imageCache)
 				
-				if displayingOnLeft == 2:
+				elif displayingOnLeft == 2:
 					if currentlyPressing == pygame.K_LEFT:
 						startAt = mainStartAt
 						selectedImage = mainSelectedImage
 						displayingOnLeft = 0
 						thumbnails = createSheetDisplay(fileList, imageCache)
-					if currentlyPressing == pygame.K_c:
+					elif currentlyPressing == pygame.K_c:
 						copiedInfo = fileList[mainSelectedImage] + ":" + str(selectedImage)
-					
-				if displayingOnLeft == 0:
-					if currentlyPressing == pygame.K_RIGHT:
-						displayingOnLeft = 2
-						thumbnails = createSpriteDisplay(fileList[selectedImage], imageData, imageCache)
-						
-						showingSpriteData = fileList[selectedImage]
-						
-						mainStartAt = startAt
-						mainSelectedImage = selectedImage
-						startAt = 0
-						selectedImage = 0
+						hasSpriteSelected = False
+				elif displayingOnLeft == 3:
+					if currentlyPressing == pygame.K_c:
+						copiedInfo = generatePreview.getSpriteName(selectedImage)
+						hasSpriteSelected = True
 					
 			if frameCounter - windowOpenedTime > 5 and (currentlyPressing == pygame.K_o or currentlyPressing == pygame.K_n or (currentlyPressing == pygame.K_s and displayingOnLeft == 2)):
 				#main frame

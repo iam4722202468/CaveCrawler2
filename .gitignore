@@ -1,2 +1,2 @@
-./main
-./build/*o
+main
+./build/*.o

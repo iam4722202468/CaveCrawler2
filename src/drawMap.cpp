@@ -19,6 +19,7 @@ bool MapSprites::drawMap(std::vector<GameObject*> &gameObjects)
 	return true;
 }
 
+//load map and layer in to object
 bool MapSprites::loadMap(std::vector<std::vector<int>> &toLoadMapVector, bool isLayer)
 {
 	if(!isLayer)
@@ -26,16 +27,16 @@ bool MapSprites::loadMap(std::vector<std::vector<int>> &toLoadMapVector, bool is
 	else
 		layerTiles.resize(toLoadMapVector[0].size() * toLoadMapVector.size() * 4);
 		
-    int tileX = 32;
-    int tileY = 32;
+	int tileX = 32;
+	int tileY = 32;
 	
-    int tileSizeX = 32;
-    int tileSizeY = 32;
+	int tileSizeX = 32;
+	int tileSizeY = 32;
     
-    int width = toLoadMapVector[0].size();
-    int height = toLoadMapVector.size();
+	int width = toLoadMapVector[0].size();
+	int height = toLoadMapVector.size();
     
-    //modified from http://www.sfml-dev.org/tutorials/2.0/graphics-vertex-array.php
+	//modified from http://www.sfml-dev.org/tutorials/2.0/graphics-vertex-array.php
     
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j)
@@ -74,10 +75,11 @@ bool MapSprites::loadMap(std::vector<std::vector<int>> &toLoadMapVector, bool is
 	return true;
 }
 
+//load spritemap
 MapSprites::MapSprites(sf::RenderWindow &window) :
 	window(window)
 {
-	if (!mainSheet.loadFromFile("resources/spritemap.png", sf::IntRect(0, 0, 736, 928)))
+	if (!mainSheet.loadFromFile("resources/spritemap.png"))
 		std::cout << "Error " << EXIT_FAILURE << " loading sprite";
 	std::cout << "map created" << std::endl;
 	
