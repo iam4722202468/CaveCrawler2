@@ -165,6 +165,13 @@ bool Wall::onContact(GameObject *contacted) //takes object values for object tha
 	return false;
 }
 
+bool Default::onContact(GameObject *contacted)
+{
+	if(contacted->solid)
+		return false;
+	return true;
+}
+
 bool GameObject::checkConflict(sf::Vector2f directionCoord)
 {
 	int standingOn = currentObjects[placeY+directionCoord.y][placeX+directionCoord.x];

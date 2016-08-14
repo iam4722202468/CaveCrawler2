@@ -12,7 +12,9 @@
 40,40,200,120
 ../resources/coin.png
 40,40,200,80
-../resources/spritemap.png
+../resources/allSprites.png
 32,32,736,928
 ../resources/zzz.png
 40,40,200,120
+../resources/blank.png
+32,32,32,32

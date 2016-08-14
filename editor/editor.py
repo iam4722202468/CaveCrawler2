@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#idea:
-#	when you 'compile' the game from the editor
-#	it takes the unique images and puts them in to a seperate .png file and saves it
-#	then it numbers everyting appropriately based on that
-#	
-#	if i'm doing this i better move where the base images are stored
-
 import pygame
 import glob
 import sys
@@ -406,7 +399,7 @@ try:
 								hasSpriteSelected = False
 				
 				elif currentlyPressing == pygame.K_g:
-					generateMap()
+					generatePreview.generateMap(fileMapInfo, imageData, imageCache)
 				
 				elif currentlyPressing == pygame.K_KP_PLUS:
 					if gridScale != 1:

@@ -1,12 +1,14 @@
 import pygame
 import forms
 import glob
+from shutil import copyfile
 
 def searchImageCache(imageName, imageCache):
 	for x in imageCache:
 		if x[1] == imageName:
 			return x[0]
 	
+	#doesn't actually get called from what i can tell, no point in fixing
 	imageCache.append([pygame.image.load(imageName).convert_alpha(), imageName]) #this doesn't actually add it...
 	return imageCache[-1][0]
 
@@ -113,10 +115,83 @@ def loadSpriteDisplay(imageCache):
 	
 	return tileArray
 
-def generateMap(fileMap, imageData, imageCache):
+def getResizedImage(place, imageData, imageMap, imageCache, placeInImage):
+	if place != -1:
+		gameBlockX = int(imageData[place][1][0])
+		gameBlockY = int(imageData[place][1][1])
+	else:
+		gameBlockX = 32
+		gameBlockY = 32
+	
+	pictureRect = imageMap.get_rect()
+	sheetX = pictureRect[2]
+	sheetY = pictureRect[3]
+	
+	tu = int(placeInImage) % (sheetX / gameBlockX);
+	tv = int(placeInImage) / (sheetX / gameBlockX);
+	
+	tempSurface = pygame.Surface((gameBlockX, gameBlockY), pygame.SRCALPHA, 32).convert_alpha()
+	
+	tempSurface.blit(imageMap, (0,0), (tu*gameBlockX, tv*gameBlockY, gameBlockX, gameBlockY))
+	tempSurface = pygame.transform.scale(tempSurface, (32, int((gameBlockY/float(gameBlockX))*32)))
+	return tempSurface
+
+def generateMap(allMaps, imageData, imageCache):
 	print "generating map"
 	
+	fileTypes = ['.map', '.layer', '.objects']
+	tileCache = [''] #needs to start at 1
 	
+	for currentMap in allMaps:
+		for i, fileName in enumerate(fileTypes):
+			finalArray = []
+			for x in currentMap[i]:
+				tempArray = []
+				for y in x:
+					if y != '0':
+						if i == 0 or i == 1:
+							try: #try to see if tile is already in tileCache, if not append to cache
+								index = tileCache.index(y)
+							
+							except ValueError:
+								index = len(tileCache)
+								tileCache.append(y)
+							
+							tempArray.append(index)
+						
+						elif i == 2: #sprites don't need to be in cache
+							tempArray.append(y.split("/")[-1])
+					else:
+						tempArray.append(0)
+				
+				finalArray.append(tempArray)
+			
+			fileString = ""
+			for p in finalArray:
+				fileString += " ".join(str(pString) for pString in p) + "\n"
+			
+			f = open("./generated/" + currentMap[-1] + fileName, "w")
+			f.write(fileString)
+			f.close()
+			
+	for spriteName in glob.glob("./sprites/*"):
+		newPlace = "./generated/" + spriteName.split("/")[-1] + ".object"
+		copyfile(spriteName,newPlace)
+			
+	
+	finalImage = pygame.Surface((32*len(tileCache), 32), pygame.SRCALPHA, 32).convert_alpha()
+	
+	for i, x in enumerate(tileCache): #generate image
+		if i > 0: #ignore first place
+			place = forms.getData(imageData, x.split(":")[0])
+			placeInImage = x.split(":")[1]
+			imageMap = searchImageCache(x.split(":")[0], imageCache)
+			
+			tempSurface = getResizedImage(place, imageData, imageMap, imageCache, placeInImage)
+			finalImage.blit(tempSurface, (i*32, 0), (0, 0, 32, 32))
+	
+	pygame.image.save(finalImage,"./generated/spritemap.png")
+
 def getThumbnail(fileMap, imageData, imageCache):
 	height = len(fileMap[0])
 	width = len(fileMap[0][0])
@@ -128,29 +203,11 @@ def getThumbnail(fileMap, imageData, imageCache):
 			for j, y in enumerate(x):
 				if fileMap[layerNum][i][j] != '0':
 					
-					place = forms.getData(imageData, fileMap[layerNum][i][j].split(":")[0])
-					if place != -1:
-						gameBlockX = int(imageData[place][1][0])
-						gameBlockY = int(imageData[place][1][1])
-					else:
-						gameBlockX = 32
-						gameBlockY = 32
-					
 					imageMap = searchImageCache(fileMap[layerNum][i][j].split(":")[0], imageCache)
-					
+					place = forms.getData(imageData, fileMap[layerNum][i][j].split(":")[0]) #to get image data
 					placeInImage = fileMap[layerNum][i][j].split(":")[1]
 					
-					pictureRect = imageMap.get_rect()
-					sheetX = pictureRect[2]
-					sheetY = pictureRect[3]
-					
-					tu = int(placeInImage) % (sheetX / gameBlockX);
-					tv = int(placeInImage) / (sheetX / gameBlockX);
-					
-					tempSurface = pygame.Surface((gameBlockX, gameBlockY), pygame.SRCALPHA, 32).convert_alpha()
-					
-					tempSurface.blit(imageMap, (0,0), (tu*gameBlockX, tv*gameBlockY, gameBlockX, gameBlockY))
-					tempSurface = pygame.transform.scale(tempSurface, (32, int((gameBlockY/float(gameBlockX))*32)))
+					tempSurface = getResizedImage(place, imageData, imageMap, imageCache, placeInImage)
 					
 					newThumb.blit(tempSurface, (j*32, i*32), (0, 0, 32, 32))
 			

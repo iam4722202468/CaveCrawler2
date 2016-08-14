@@ -46,7 +46,7 @@ class GameObject
 	int mapTileX = 32;
 	int mapTileY = 32;
 	
-	protected:
+	public:
 	
 	std::vector<std::vector<int>> &currentObjects; //2d vector of object map
 	
@@ -93,7 +93,6 @@ class GameObject
 	
 	bool checkConflict(sf::Vector2f directionCoord);
 	
-	public:
 	int thisID;
 	std::string classType;
 	
@@ -124,7 +123,7 @@ class Wall : public GameObject
 class Default : public GameObject
 {
 	public:
-	bool onContact(GameObject *contacted) override {return true;}
+	bool onContact(GameObject *contacted) override;
 	
 	Default(sf::RenderWindow& window, std::vector<GameObject*> &gameObjects, std::string classType, std::vector<std::vector<int>> &currentObjects, sf::Texture *spriteSheet, int placeX, int placeY, bool movable, bool solid, bool animated, bool selfMoving, bool moveWithKeys, bool wander, int movingSpaceX, int movingSpaceY, int movingDirection, int currentSprite, int animatedSpeed, int sizeX, int sizeY, int spriteSheetSizeX, int spriteSheetSizeY, std::vector<int> spriteOrder, std::vector<int> path, std::vector<int> extraInfo) :
 		GameObject(window, gameObjects, classType, currentObjects, spriteSheet, placeX, placeY, movable, solid, animated, selfMoving, moveWithKeys, wander, movingSpaceX, movingSpaceY,  movingDirection, currentSprite, animatedSpeed, sizeX, sizeY, spriteSheetSizeX, spriteSheetSizeY, spriteOrder, path, extraInfo) {}
