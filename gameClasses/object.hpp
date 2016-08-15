@@ -48,6 +48,9 @@ class GameObject
 	
 	public:
 	
+	int frameCounter = 0;
+	int animationNumber = 0;
+	
 	std::vector<std::vector<int>> &currentObjects; //2d vector of object map
 	
 	std::vector<GameObject*> chestObjects;
@@ -66,6 +69,7 @@ class GameObject
 	
 	bool selfMoving;
 	//bool moveWithKeys;
+	
 	bool wander;
 	
 	int movingSpaceX; //area it can move in the x direction when wandering (towards either side)

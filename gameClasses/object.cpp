@@ -65,7 +65,7 @@ bool MovingObject::updateMoving()
 		
 		if(currentSprite % animationNumber == 0 && frameCounter != 0)
 			currentSprite -= animationNumber;
-			
+		
 		drawSprite(sprite, spriteSheetSizeX, sizeX, spriteOrder, currentSprite, sizeY);
 	}
 	
@@ -154,6 +154,24 @@ bool GameObject::drawObject()
 			currentObjects[placeY][placeX] = thisID;
 		}
 	
+	if(animated)
+	{
+		if(frameCounter % (animatedSpeed/(spriteOrder.size()-1)) == 0)
+		{
+			currentSprite++;
+			
+			if(currentSprite == spriteOrder.size())
+				currentSprite -= spriteOrder.size();
+			
+			drawSprite(sprite, spriteSheetSizeX, sizeX, spriteOrder, currentSprite, sizeY);
+		}
+		
+		if(frameCounter > animatedSpeed)
+			frameCounter = 0;
+			
+		frameCounter++;
+	}
+	
 	sprite.setPosition(sf::Vector2f(placeX*mapTileX + addedX, placeY*mapTileY + addedY));
 	window.draw(sprite);
 	return true;
@@ -167,7 +185,7 @@ bool Wall::onContact(GameObject *contacted) //takes object values for object tha
 
 bool Default::onContact(GameObject *contacted)
 {
-	if(contacted->solid)
+	if(solid)
 		return false;
 	return true;
 }
