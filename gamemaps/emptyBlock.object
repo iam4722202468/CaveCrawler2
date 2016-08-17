@@ -9,11 +9,11 @@ movingSpaceY: 0
 movingDirection: 0
 currentSprite: 0
 animatedSpeed: 0
-spriteOrder: 0
+spriteOrder: 296
 extraInfo: -
 path: -
-spriteSheetPlace: blank.png
+spriteSheetPlace: allSprites.png
 sizeX: 32
 sizeY: 32
-spriteSheetSizeX: 32
-spriteSheetSizeY: 32
+spriteSheetSizeX: 736
+spriteSheetSizeY: 928

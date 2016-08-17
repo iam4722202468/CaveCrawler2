@@ -9,7 +9,7 @@ movingSpaceY: 0
 movingDirection: 0
 currentSprite: 0
 animatedSpeed: 30
-spriteOrder: 374,375,376,375
+spriteOrder: 374,375,376
 extraInfo: -
 path: -
 spriteSheetPlace: allSprites.png

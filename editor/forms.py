@@ -225,7 +225,7 @@ class createNewSprite(Frame):
 			stringToWrite += "spriteSheetSizeY: " + self.spriteSize[3]
 			
 			with open("./sprites/" + self.mapNameEntry.get(),"w+") as f:
-				f.write(stringToWrite)
+				f.write(stringToWrite + '\n')
 			
 			self.destroy()
 			self.quit()

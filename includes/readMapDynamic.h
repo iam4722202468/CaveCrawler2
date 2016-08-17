@@ -17,7 +17,6 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 	maps.push_back(std::vector<std::vector<int>>());
 	
 	bool isAtItems = false;
-	
 	std::string itemsReturn = "";
 	
 	while (!infile.eof())
@@ -29,7 +28,10 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 		else if(!isAtItems)
 		{
 			if(sLine == "_")
+			{
+				std::cout << maps.size() << std::endl;
 				maps.push_back(std::vector<std::vector<int>>());
+			}
 			
 			maps[maps.size()-1].push_back(std::vector<int>());
 			
@@ -41,11 +43,21 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 					currentNumber += sLine[x];
 				else
 				{
+					//std::cout << currentNumber << " ";
 					maps[maps.size()-1][maps[maps.size()-1].size()-1].push_back(std::stoi(currentNumber));
+					
 					currentNumber = "";
 				}
 			}
-			
+			//std::cout << std::endl;
+			/*
+			for(int x = 0; x < maps[maps.size()-1].size(); x++)
+			{
+				for(int y = 0; y < maps[maps.size()-1][0].size(); y++)
+					std::cout << maps[maps.size()-1][x][y];
+				std::cout << ":\n";
+			}
+			*/
 			if(sLine != "_" && sLine != "")
 				maps[maps.size()-1][maps[maps.size()-1].size()-1].push_back(std::stoi(currentNumber));
 		}

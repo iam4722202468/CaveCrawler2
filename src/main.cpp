@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 	window.setView(view);*/
 	
 	GameController game(window);
-	game.setMap(maps[0]);
-	game.setLayer(layers[0]);
-	game.setObjects(objects[0]);
+	game.setMap(maps[1]);
+	game.setLayer(layers[1]);
+	game.setObjects(objects[1]);
 	game.generateObjects(objectInfo);
 	
 	sf::Clock clock;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 		
 		frames++;
 		
-		while (window.pollEvent(event))
+		while(window.pollEvent(event))
 		{
 			if(event.type == sf::Event::Closed)
 				window.close();
