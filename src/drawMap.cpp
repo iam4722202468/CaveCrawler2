@@ -7,8 +7,6 @@
 
 bool MapSprites::drawMap(std::vector<GameObject*> &gameObjects)
 {
-	window.clear(sf::Color::Green);
-	
 	window.draw(mapTiles, &mainSheet);
 	
 	for(int x = 0; x < gameObjects.size(); x++)

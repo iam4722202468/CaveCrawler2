@@ -12,8 +12,6 @@ class GameMap;
 class GameController
 {
 	public:
-	//Coordinate playerPlace;
-	//Coordinate cameraPlace;
 	
 	std::vector<sf::Texture*> textureVector;
 	std::vector<std::string> textureVectorString;

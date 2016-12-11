@@ -1,5 +1,5 @@
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 ./sprites/water 0 0 0 0 0
 0 0 0 0 ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock 0 ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock
 ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock ./sprites/emptyBlock 0 0 0 0 0 0 ./sprites/emptyBlock 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 ./sprites/emptyBlock 0 0 0 0 0 0 0 0 0 0

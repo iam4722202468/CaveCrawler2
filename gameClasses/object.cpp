@@ -171,7 +171,6 @@ bool GameObject::drawObject()
 			
 		frameCounter++;
 	}
-	
 	sprite.setPosition(sf::Vector2f(placeX*mapTileX + addedX, placeY*mapTileY + addedY));
 	window.draw(sprite);
 	return true;

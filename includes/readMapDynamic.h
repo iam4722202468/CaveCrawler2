@@ -14,7 +14,7 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 	
 	infile.open(fileName);
 	
-	maps.push_back(std::vector<std::vector<int>>());
+	auto curmap = std::vector<std::vector<int>>();
 	
 	bool isAtItems = false;
 	std::string itemsReturn = "";
@@ -29,37 +29,20 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 		{
 			if(sLine == "_")
 			{
-				std::cout << maps.size() << std::endl;
-				maps.push_back(std::vector<std::vector<int>>());
+				maps.push_back(curmap);
+				curmap = std::vector<std::vector<int>>();
+				continue;
 			}
 			
-			maps[maps.size()-1].push_back(std::vector<int>());
+			auto curline = std::vector<int>();
 			
-			std::string currentNumber = "";
+			auto nums = std::vector<std::string>();
+			stringsplit(',',sLine,nums);
 			
-			for(int x = 0; x < sLine.length(); x++)
-			{
-				if(sLine[x] != ',')
-					currentNumber += sLine[x];
-				else
-				{
-					//std::cout << currentNumber << " ";
-					maps[maps.size()-1][maps[maps.size()-1].size()-1].push_back(std::stoi(currentNumber));
-					
-					currentNumber = "";
-				}
+			for(int i=0;i<nums.size()-1;i++){
+				curline.push_back(std::stoi(nums[i]));
 			}
-			//std::cout << std::endl;
-			/*
-			for(int x = 0; x < maps[maps.size()-1].size(); x++)
-			{
-				for(int y = 0; y < maps[maps.size()-1][0].size(); y++)
-					std::cout << maps[maps.size()-1][x][y];
-				std::cout << ":\n";
-			}
-			*/
-			if(sLine != "_" && sLine != "")
-				maps[maps.size()-1][maps[maps.size()-1].size()-1].push_back(std::stoi(currentNumber));
+			curmap.push_back(curline);
 		}
 		else
 		{
@@ -67,6 +50,7 @@ std::string getMaps(std::string fileName, std::vector<std::vector<std::vector<in
 				itemsReturn += sLine + '\n';
 		}
 	}
+	maps.push_back(curmap);
 	return itemsReturn;
 }
 

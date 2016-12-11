@@ -1,2 +1,5 @@
 main
-./build/*.o
+/build/*.o
+/testing
+/gamemaps.old
+/editor/generated
