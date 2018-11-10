@@ -17,3 +17,4 @@ sizeX: 40
 sizeY: 40
 spriteSheetSizeX: 200
 spriteSheetSizeY: 120
+cameraFocus: 0

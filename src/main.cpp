@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
     view.setViewport(sf::FloatRect(0.f, 0.f, 2.f, 2.f));
     
     GameController game(window);
-    game.setMap(maps[0]);
-    game.setLayer(layers[0]);
-    game.setObjects(objects[0]);
+    game.setMap(maps[1]);
+    game.setLayer(layers[1]);
+    game.setObjects(objects[1]);
     game.generateObjects(objectInfo);
     
     sf::Clock clock;
@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
         }
         
         window.setView(view);
+        window.setView(game.characterView);
         window.clear(sf::Color::Green);
         game.drawCurrentMap();
         

@@ -20,6 +20,7 @@ class GameController
 	std::vector<GameObject*> gameObjects;
 	
 	sf::RenderWindow &window;
+  sf::View characterView;
 	
 	GameController(sf::RenderWindow &window);
 	

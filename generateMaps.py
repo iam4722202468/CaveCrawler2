@@ -126,9 +126,10 @@ cppStringLayer = cppStringLayer[:-1] + "};"
 #	std::vector<int> spriteOrder	16
 #	std::vector<int> path			17
 #	std::vector<int> extraInfo		18
+#	bool cameraFocus		18
 ##
 
-objectValues = ['movable', 'solid', 'animated', 'selfMoving', 'moveWithKeys', 'wander', 'movingSpaceX', 'movingSpaceY', 'movingDirection', 'currentSprite', 'animatedSpeed', 'sizeX', 'sizeY', 'spriteSheetSizeX', 'spriteSheetSizeY', 'spriteSheetPlace', 'spriteOrder', 'path', 'extraInfo']
+objectValues = ['movable', 'solid', 'animated', 'selfMoving', 'moveWithKeys', 'wander', 'movingSpaceX', 'movingSpaceY', 'movingDirection', 'currentSprite', 'animatedSpeed', 'sizeX', 'sizeY', 'spriteSheetSizeX', 'spriteSheetSizeY', 'spriteSheetPlace', 'spriteOrder', 'path', 'extraInfo', 'cameraFocus']
 
 objectCounter = 1
 objectAttributes = [] #list of attribute strings

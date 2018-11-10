@@ -6,12 +6,15 @@
 
 #include "drawMap.hpp"
 #include "../gameClasses/object.hpp"
+#include "controller.hpp"
 
 class MapSprites;
+class GameController;
 
 class GameMap
 {
 	sf::RenderWindow &window;
+	GameController *game;
 	
 	public:
 	
@@ -27,7 +30,7 @@ class GameMap
 	
 	bool drawCurrentMap(std::vector<GameObject*> &gameObjects);
 	
-	GameMap(sf::RenderWindow &window);
+	GameMap(GameController *game, sf::RenderWindow &window);
 };
 
 #endif

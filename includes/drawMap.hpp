@@ -5,8 +5,11 @@
 #include <SFML/Graphics.hpp>
 
 #include "../gameClasses/object.hpp"
+#include "controller.hpp"
 
 static std::vector<std::vector<int>> DEFAULT_VECTOR;
+
+class GameController;
 
 class MapSprites {
 	sf::RenderWindow &window;
@@ -19,7 +22,7 @@ class MapSprites {
 	
 	MapSprites(sf::RenderWindow &window);
 	
-	bool drawMap(std::vector<GameObject*> &gameObjects);
+	bool drawMap(GameController *game, std::vector<GameObject*> &gameObjects);
 	bool loadMap(std::vector<std::vector<int>> &toLoadMapVector, bool isLayer);
 };
 

@@ -5,12 +5,12 @@
 #include "drawMap.hpp"
 #include "../gameClasses/object.hpp"
 
-bool MapSprites::drawMap(std::vector<GameObject*> &gameObjects)
+bool MapSprites::drawMap(GameController *game, std::vector<GameObject*> &gameObjects)
 {
-	window.draw(mapTiles, &mainSheet);
+  window.draw(mapTiles, &mainSheet);
 	
 	for(int x = 0; x < gameObjects.size(); x++)
-		gameObjects[x]->drawObject();
+		gameObjects[x]->drawObject(game);
 	
 	window.draw(layerTiles, &mainSheet);
 	
@@ -33,8 +33,6 @@ bool MapSprites::loadMap(std::vector<std::vector<int>> &toLoadMapVector, bool is
     
 	int width = toLoadMapVector[0].size();
 	int height = toLoadMapVector.size();
-    
-	//modified from http://www.sfml-dev.org/tutorials/2.0/graphics-vertex-array.php
     
 	for (int i = 0; i < width; ++i)
 		for (int j = 0; j < height; ++j)

@@ -3,3 +3,5 @@ main
 /testing
 /gamemaps.old
 /editor/generated
+*.swp
+*.swo

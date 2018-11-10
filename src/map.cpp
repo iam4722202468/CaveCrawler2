@@ -27,12 +27,13 @@ bool GameMap::setObjects(std::vector<std::vector<int>> &objectVector)
 
 bool GameMap::drawCurrentMap(std::vector<GameObject*> &gameObjects)
 {
-	mapSprites->drawMap(gameObjects);
+	mapSprites->drawMap(game, gameObjects);
 }
 
 //create game map and mapSprites (which draws map)
-GameMap::GameMap(sf::RenderWindow &window) :
-	window(window)
+GameMap::GameMap(GameController *game, sf::RenderWindow &window) :
+	window(window),
+  game(game)
 {
 	mapSprites = new MapSprites(window);
 }

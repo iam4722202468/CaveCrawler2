@@ -5,6 +5,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+class GameController;
+
 class MovingObject
 {
 	int mapTileX = 32;
@@ -25,12 +27,27 @@ class MovingObject
 	int spriteSheetSizeX;
 	
 	int &currentSprite;
+  bool cameraFocus;
+  GameController *game;
 	
 	public:
 	
 	sf::Vector2f directionCoord;
 	
-	MovingObject(sf::Sprite &sprite, int sizeX, int sizeY, int spriteSheetSizeX, int &currentSprite, int &addedX, int &addedY, int &placeX, int &placeY, std::vector<int> &spriteOrder, int &animatedSpeed, int animationNumber);
+	MovingObject(GameController *game,
+    sf::Sprite &sprite,
+    int sizeX,
+    int sizeY,
+    int spriteSheetSizeX,
+    int &currentSprite,
+    int &addedX,
+    int &addedY,
+    int &placeX,
+    int &placeY,
+    std::vector<int> &spriteOrder,
+    int &animatedSpeed,
+    int animationNumber,
+    bool cameraFocus);
 	
 	bool updateInfo(sf::Vector2f direction);
 	bool updateMoving();
@@ -40,6 +57,7 @@ class GameObject;
 
 class GameObject
 {
+  GameController *game;
 	sf::RenderWindow& window;
 	sf::Sprite sprite;
 	
@@ -79,6 +97,7 @@ class GameObject
 	int currentSprite;
 	
 	int animatedSpeed;
+  bool cameraFocus;
 	
 	int sizeX;				//size of sprite
 	int sizeY;
@@ -102,8 +121,34 @@ class GameObject
 	
 	virtual bool onContact(GameObject *contacted) = 0;
 	
-	GameObject(sf::RenderWindow& window, std::vector<GameObject*> &gameObjects, std::string classType, std::vector<std::vector<int>> &currentObjects, sf::Texture *spriteSheet, int placeX, int placeY, bool movable, bool solid, bool animated, bool selfMoving, bool moveWithKeys, bool wander, int movingSpaceX, int movingSpaceY, int movingDirection, int currentSprite, int animatedSpeed, int sizeX, int sizeY, int spriteSheetSizeX, int spriteSheetSizeY, std::vector<int> spriteOrder, std::vector<int> path, std::vector<int> extraInfo);
-	bool drawObject();
+	GameObject(GameController *game,
+    sf::RenderWindow& window,
+    std::vector<GameObject*> &gameObjects,
+    std::string classType,
+    std::vector<std::vector<int>> &currentObjects,
+    sf::Texture *spriteSheet,
+    int placeX,
+    int placeY,
+    bool movable,
+    bool solid,
+    bool animated,
+    bool selfMoving,
+    bool moveWithKeys,
+    bool wander,
+    int movingSpaceX,
+    int movingSpaceY,
+    int movingDirection,
+    int currentSprite,
+    int animatedSpeed,
+    int sizeX,
+    int sizeY,
+    int spriteSheetSizeX,
+    int spriteSheetSizeY,
+    std::vector<int> spriteOrder,
+    std::vector<int> path,
+    std::vector<int> extraInfo,
+    bool cameraFocus);
+	bool drawObject(GameController *game);
 	
 	//bool updateSprite();
 	
@@ -120,8 +165,60 @@ class Wall : public GameObject
 	public:
 	bool onContact(GameObject *contacted) override;
 	
-	Wall(sf::RenderWindow& window, std::vector<GameObject*> &gameObjects, std::string classType, std::vector<std::vector<int>> &currentObjects, sf::Texture *spriteSheet, int placeX, int placeY, bool movable, bool solid, bool animated, bool selfMoving, bool moveWithKeys, bool wander, int movingSpaceX, int movingSpaceY, int movingDirection, int currentSprite, int animatedSpeed, int sizeX, int sizeY, int spriteSheetSizeX, int spriteSheetSizeY, std::vector<int> spriteOrder, std::vector<int> path, std::vector<int> extraInfo) :
-		GameObject(window, gameObjects, classType, currentObjects, spriteSheet, placeX, placeY, movable, solid, animated, selfMoving, moveWithKeys, wander, movingSpaceX, movingSpaceY,  movingDirection, currentSprite, animatedSpeed, sizeX, sizeY, spriteSheetSizeX, spriteSheetSizeY, spriteOrder, path, extraInfo) {}
+	Wall(GameController *game,
+    sf::RenderWindow& window,
+    std::vector<GameObject*> &gameObjects,
+    std::string classType,
+    std::vector<std::vector<int>> &currentObjects,
+    sf::Texture *spriteSheet,
+    int placeX,
+    int placeY,
+    bool movable,
+    bool solid,
+    bool animated,
+    bool selfMoving,
+    bool moveWithKeys,
+    bool wander,
+    int movingSpaceX,
+    int movingSpaceY,
+    int movingDirection,
+    int currentSprite,
+    int animatedSpeed,
+    int sizeX,
+    int sizeY,
+    int spriteSheetSizeX,
+    int spriteSheetSizeY,
+    std::vector<int> spriteOrder,
+    std::vector<int> path,
+    std::vector<int> extraInfo,
+    bool cameraFocus) :
+		GameObject(game,
+      window,
+      gameObjects,
+      classType,
+      currentObjects,
+      spriteSheet,
+      placeX,
+      placeY,
+      movable,
+      solid,
+      animated,
+      selfMoving,
+      moveWithKeys,
+      wander,
+      movingSpaceX,
+      movingSpaceY,
+      movingDirection,
+      currentSprite,
+      animatedSpeed,
+      sizeX,
+      sizeY,
+      spriteSheetSizeX,
+      spriteSheetSizeY,
+      spriteOrder,
+      path,
+      extraInfo,
+      cameraFocus) {}
 };
 
 class Default : public GameObject
@@ -129,8 +226,60 @@ class Default : public GameObject
 	public:
 	bool onContact(GameObject *contacted) override;
 	
-	Default(sf::RenderWindow& window, std::vector<GameObject*> &gameObjects, std::string classType, std::vector<std::vector<int>> &currentObjects, sf::Texture *spriteSheet, int placeX, int placeY, bool movable, bool solid, bool animated, bool selfMoving, bool moveWithKeys, bool wander, int movingSpaceX, int movingSpaceY, int movingDirection, int currentSprite, int animatedSpeed, int sizeX, int sizeY, int spriteSheetSizeX, int spriteSheetSizeY, std::vector<int> spriteOrder, std::vector<int> path, std::vector<int> extraInfo) :
-		GameObject(window, gameObjects, classType, currentObjects, spriteSheet, placeX, placeY, movable, solid, animated, selfMoving, moveWithKeys, wander, movingSpaceX, movingSpaceY,  movingDirection, currentSprite, animatedSpeed, sizeX, sizeY, spriteSheetSizeX, spriteSheetSizeY, spriteOrder, path, extraInfo) {}
+	Default(GameController *game,
+    sf::RenderWindow& window,
+    std::vector<GameObject*> &gameObjects,
+    std::string classType,
+    std::vector<std::vector<int>> &currentObjects,
+    sf::Texture *spriteSheet,
+    int placeX,
+    int placeY,
+    bool movable,
+    bool solid,
+    bool animated,
+    bool selfMoving,
+    bool moveWithKeys,
+    bool wander,
+    int movingSpaceX,
+    int movingSpaceY,
+    int movingDirection,
+    int currentSprite,
+    int animatedSpeed,
+    int sizeX,
+    int sizeY,
+    int spriteSheetSizeX,
+    int spriteSheetSizeY,
+    std::vector<int> spriteOrder,
+    std::vector<int> path,
+    std::vector<int> extraInfo,
+    bool cameraFocus) :
+		GameObject(game,
+      window,
+      gameObjects,
+      classType,
+      currentObjects,
+      spriteSheet,
+      placeX,
+      placeY,
+      movable,
+      solid,
+      animated,
+      selfMoving,
+      moveWithKeys,
+      wander,
+      movingSpaceX,
+      movingSpaceY,
+      movingDirection,
+      currentSprite,
+      animatedSpeed,
+      sizeX,
+      sizeY,
+      spriteSheetSizeX,
+      spriteSheetSizeY,
+      spriteOrder,
+      path,
+      extraInfo,
+      cameraFocus) {}
 
 };
 

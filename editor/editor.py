@@ -15,8 +15,8 @@ import generatePreview
 
 pygame.init()
 
-display_width = 800
-display_height = 700
+display_width = 500
+display_height = 500
 
 fileMapInfo = []
 imageCache = []
@@ -336,6 +336,8 @@ keyPressTime = 10
 
 hasSpriteSelected = False
 
+pygame.mixer.quit()
+
 try:
     while running:
         frameCounter += 1
@@ -343,6 +345,8 @@ try:
         pygame.time.Clock().tick(60)
         
         for event in pygame.event.get():
+
+            pygame.time.wait(0)
             if event.type == pygame.KEYDOWN:
                 if event.key <= 276:
                     currentlyPressing = event.key
@@ -552,6 +556,7 @@ try:
                 windowOpenedTime = frameCounter
                 
                 root = Tk()
+
                 screen_width = root.winfo_screenwidth()
                 screen_height = root.winfo_screenheight()
                 
