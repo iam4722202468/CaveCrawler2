@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
         getObjects("./includes/generatedObjects.txt", objects, objectInfo);
     #endif
     
-    sf::RenderWindow window(sf::VideoMode(1400, 1400), "SFML window");
+    sf::RenderWindow window(sf::VideoMode(1200, 800), "SFML window");
     
     sf::View view;
     
@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
     view.setViewport(sf::FloatRect(0.f, 0.f, 2.f, 2.f));
     
     GameController game(window);
-    game.setMap(maps[1]);
-    game.setLayer(layers[1]);
-    game.setObjects(objects[1]);
+    game.setMap(maps[3]);
+    game.setLayer(layers[3]);
+    game.setObjects(objects[3]);
     game.generateObjects(objectInfo);
     
     sf::Clock clock;
@@ -68,6 +68,8 @@ int main(int argc, char *argv[])
             game.getKeyPress(73);
         } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             game.getKeyPress(74);
+        } else {
+            game.getKeyPress(0);
         }
                 
         while(window.pollEvent(event))
@@ -78,8 +80,9 @@ int main(int argc, char *argv[])
         
         window.setView(view);
         window.setView(game.characterView);
-        window.clear(sf::Color::Green);
+        window.clear(sf::Color::Black);
         game.drawCurrentMap();
+        game.updateSprites();
         
         window.setView(window.getDefaultView());
         

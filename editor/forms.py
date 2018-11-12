@@ -222,7 +222,8 @@ class createNewSprite(Frame):
 			stringToWrite += "sizeX: " + self.spriteSize[0] + '\n'
 			stringToWrite += "sizeY: " + self.spriteSize[1] + '\n'
 			stringToWrite += "spriteSheetSizeX: " + self.spriteSize[2] + '\n'
-			stringToWrite += "spriteSheetSizeY: " + self.spriteSize[3]
+			stringToWrite += "spriteSheetSizeY: " + self.spriteSize[3] + '\n'
+			stringToWrite += "cameraFocus: 0"
 			
 			with open("./sprites/" + self.mapNameEntry.get(),"w+") as f:
 				f.write(stringToWrite + '\n')

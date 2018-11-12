@@ -6,8 +6,14 @@
 #include "stringStuff.hpp" //for split string
 #include "../gameClasses/object.hpp"
 
-//(1,2,3,4) <- up left down right
+bool GameController::updateSprites() {
+	for(int x = 0; x < gameObjects.size(); x++)
+	{
+    gameObjects[x]->update(this);
+  }
+}
 
+//(1,2,3,4) <- up left down right
 bool GameController::getKeyPress(int keyValue)
 {
 	for(int x = 0; x < gameObjects.size(); x++)
@@ -22,7 +28,10 @@ bool GameController::getKeyPress(int keyValue)
 				gameObjects[x]->startMoving(3);
 			else if(keyValue == 72) //right
 				gameObjects[x]->startMoving(4);
-		}
+		} else if (keyValue == 0 && gameObjects[x]->isMoving) {
+      gameObjects[x]->movingObject->directionCoordBuffer.x = 0;
+      gameObjects[x]->movingObject->directionCoordBuffer.y = 0;
+    }
 	}
 	return true;
 }
@@ -106,42 +115,40 @@ bool GameController::generateObjects(std::vector<std::vector<std::string>> &obje
 						std::cout << "Error " << EXIT_FAILURE << " loading sprite";
 					std::cout << "sprite created" << std::endl;
 				}
-				
+  
+        GameObjectProps gameObjectProps = setGameObjectProps(
+          textureVector[textureAt],
+          "Default",
+          y, x,
+          tempInt[0], tempInt[1], tempInt[2],
+          tempInt[3], tempInt[4], tempInt[5],
+          tempInt[6], tempInt[7], tempInt[8], 
+          tempInt[9], tempInt[10], tempInt[11],
+          tempInt[12], tempInt[13], tempInt[14],
+          cameraFocus
+        );
+
 				if(extraInfo.size() > 0 && extraInfo[0] == 1) {
+          gameObjectProps.classType = "Wall";
 					gameObjects.push_back(
             new Wall(
               this,
               window,
               gameObjects,
-              "Wall",
               currentMapObject->currentObjects,
-              textureVector[textureAt],
-              y, x,
-              tempInt[0], tempInt[1], tempInt[2],
-              tempInt[3], tempInt[4], tempInt[5],
-              tempInt[6], tempInt[7], tempInt[8], 
-              tempInt[9], tempInt[10], tempInt[11],
-              tempInt[12], tempInt[13], tempInt[14],
-              spriteOrder, path, extraInfo, cameraFocus
+              spriteOrder, path, extraInfo, gameObjectProps
             ));
-          } else {
-            gameObjects.push_back(
-              new Default(
-                this,
-                window,
-                gameObjects,
-                "GameObject",
-                currentMapObject->currentObjects,
-                textureVector[textureAt],
-                y, x,
-                tempInt[0], tempInt[1], tempInt[2],
-                tempInt[3], tempInt[4], tempInt[5],
-                tempInt[6], tempInt[7], tempInt[8],
-                tempInt[9], tempInt[10], tempInt[11],
-                tempInt[12], tempInt[13], tempInt[14],
-                spriteOrder, path, extraInfo, cameraFocus
-              ));
-          }
+        } else {
+          gameObjectProps.classType = "GameObject";
+          gameObjects.push_back(
+            new Default(
+              this,
+              window,
+              gameObjects,
+              currentMapObject->currentObjects,
+              spriteOrder, path, extraInfo, gameObjectProps
+          ));
+        }
       }
 		}
 	}
@@ -168,5 +175,6 @@ bool GameController::drawCurrentMap()
 GameController::GameController(sf::RenderWindow &window):
 	window(window)
 {
+  characterView.setSize(32.f * 20, 32.f * 19);
 	currentMapObject = new GameMap(this, window);
 }

@@ -17,3 +17,4 @@ sizeX: 64
 sizeY: 64
 spriteSheetSizeX: 256
 spriteSheetSizeY: 256
+cameraFocus: 1

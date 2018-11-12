@@ -6,6 +6,54 @@
 #include <SFML/Graphics.hpp>
 
 class GameController;
+class GameObject;
+
+struct GameObjectProps {
+  std::string classType;
+  sf::Texture *spriteSheet;
+  int placeX;
+  int placeY;
+  bool movable;
+  bool solid;
+  bool animated;
+  bool selfMoving;
+  bool moveWithKeys;
+  bool wander;
+  int movingSpaceX;
+  int movingSpaceY;
+  int movingDirection;
+  int currentSprite;
+  int animatedSpeed;
+  int sizeX;
+  int sizeY;
+  int spriteSheetSizeX;
+  int spriteSheetSizeY;
+  bool cameraFocus;
+};
+
+void getGameObjectProps(GameObject *gameObject, GameObjectProps gameObjectProps);
+
+GameObjectProps setGameObjectProps(
+  sf::Texture *spriteSheet,
+  std::string classType,
+  int placeX,
+  int placeY,
+  bool movable,
+  bool solid,
+  bool animated,
+  bool selfMoving,
+  bool moveWithKeys,
+  bool wander,
+  int movingSpaceX,
+  int movingSpaceY,
+  int movingDirection,
+  int currentSprite,
+  int animatedSpeed,
+  int sizeX,
+  int sizeY,
+  int spriteSheetSizeX,
+  int spriteSheetSizeY,
+  bool cameraFocus);
 
 class MovingObject
 {
@@ -33,6 +81,7 @@ class MovingObject
 	public:
 	
 	sf::Vector2f directionCoord;
+	sf::Vector2f directionCoordBuffer;
 	
 	MovingObject(GameController *game,
     sf::Sprite &sprite,
@@ -49,7 +98,7 @@ class MovingObject
     int animationNumber,
     bool cameraFocus);
 	
-	bool updateInfo(sf::Vector2f direction);
+	bool updateInfo(sf::Vector2f direction, sf::Vector2f directionBuffer);
 	bool updateMoving();
 };
 
@@ -66,6 +115,9 @@ class GameObject
 	
 	public:
 	
+  std::vector<int> internalVariablesInt;
+  std::vector<std::string> internalVariablesString;
+
 	int frameCounter = 0;
 	int animationNumber = 0;
 	
@@ -87,7 +139,9 @@ class GameObject
 	
 	bool selfMoving;
 	//bool moveWithKeys;
-	
+
+  sf::Texture *spriteSheet  ;
+
 	bool wander;
 	
 	int movingSpaceX; //area it can move in the x direction when wandering (towards either side)
@@ -124,31 +178,15 @@ class GameObject
 	GameObject(GameController *game,
     sf::RenderWindow& window,
     std::vector<GameObject*> &gameObjects,
-    std::string classType,
     std::vector<std::vector<int>> &currentObjects,
-    sf::Texture *spriteSheet,
-    int placeX,
-    int placeY,
-    bool movable,
-    bool solid,
-    bool animated,
-    bool selfMoving,
-    bool moveWithKeys,
-    bool wander,
-    int movingSpaceX,
-    int movingSpaceY,
-    int movingDirection,
-    int currentSprite,
-    int animatedSpeed,
-    int sizeX,
-    int sizeY,
-    int spriteSheetSizeX,
-    int spriteSheetSizeY,
     std::vector<int> spriteOrder,
     std::vector<int> path,
     std::vector<int> extraInfo,
-    bool cameraFocus);
-	bool drawObject(GameController *game);
+    GameObjectProps gameObjectProps
+  );
+
+  bool drawObject(GameController *game);
+  bool update(GameController *game);
 	
 	//bool updateSprite();
 	
@@ -168,57 +206,21 @@ class Wall : public GameObject
 	Wall(GameController *game,
     sf::RenderWindow& window,
     std::vector<GameObject*> &gameObjects,
-    std::string classType,
     std::vector<std::vector<int>> &currentObjects,
-    sf::Texture *spriteSheet,
-    int placeX,
-    int placeY,
-    bool movable,
-    bool solid,
-    bool animated,
-    bool selfMoving,
-    bool moveWithKeys,
-    bool wander,
-    int movingSpaceX,
-    int movingSpaceY,
-    int movingDirection,
-    int currentSprite,
-    int animatedSpeed,
-    int sizeX,
-    int sizeY,
-    int spriteSheetSizeX,
-    int spriteSheetSizeY,
     std::vector<int> spriteOrder,
     std::vector<int> path,
     std::vector<int> extraInfo,
-    bool cameraFocus) :
+    GameObjectProps gameObjectProps
+  ) :
 		GameObject(game,
       window,
       gameObjects,
-      classType,
       currentObjects,
-      spriteSheet,
-      placeX,
-      placeY,
-      movable,
-      solid,
-      animated,
-      selfMoving,
-      moveWithKeys,
-      wander,
-      movingSpaceX,
-      movingSpaceY,
-      movingDirection,
-      currentSprite,
-      animatedSpeed,
-      sizeX,
-      sizeY,
-      spriteSheetSizeX,
-      spriteSheetSizeY,
       spriteOrder,
       path,
       extraInfo,
-      cameraFocus) {}
+      gameObjectProps
+    ) { getGameObjectProps(this, gameObjectProps); }
 };
 
 class Default : public GameObject
@@ -229,57 +231,21 @@ class Default : public GameObject
 	Default(GameController *game,
     sf::RenderWindow& window,
     std::vector<GameObject*> &gameObjects,
-    std::string classType,
     std::vector<std::vector<int>> &currentObjects,
-    sf::Texture *spriteSheet,
-    int placeX,
-    int placeY,
-    bool movable,
-    bool solid,
-    bool animated,
-    bool selfMoving,
-    bool moveWithKeys,
-    bool wander,
-    int movingSpaceX,
-    int movingSpaceY,
-    int movingDirection,
-    int currentSprite,
-    int animatedSpeed,
-    int sizeX,
-    int sizeY,
-    int spriteSheetSizeX,
-    int spriteSheetSizeY,
     std::vector<int> spriteOrder,
     std::vector<int> path,
     std::vector<int> extraInfo,
-    bool cameraFocus) :
+    GameObjectProps gameObjectProps
+  ) :
 		GameObject(game,
       window,
       gameObjects,
-      classType,
       currentObjects,
-      spriteSheet,
-      placeX,
-      placeY,
-      movable,
-      solid,
-      animated,
-      selfMoving,
-      moveWithKeys,
-      wander,
-      movingSpaceX,
-      movingSpaceY,
-      movingDirection,
-      currentSprite,
-      animatedSpeed,
-      sizeX,
-      sizeY,
-      spriteSheetSizeX,
-      spriteSheetSizeY,
       spriteOrder,
       path,
       extraInfo,
-      cameraFocus) {}
+      gameObjectProps
+    ) { getGameObjectProps(this, gameObjectProps); }
 
 };
 

@@ -31,6 +31,7 @@ class GameController
 	
 	bool generateObjects(std::vector<std::vector<std::string>> &objectInfo);
 	bool drawCurrentMap();
+	bool updateSprites();
 	
 	bool getKeyPress(int keyValue);
 };

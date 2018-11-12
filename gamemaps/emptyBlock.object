@@ -8,7 +8,7 @@ movingSpaceX: 0
 movingSpaceY: 0
 movingDirection: 0
 currentSprite: 0
-animatedSpeed: 0
+animatedSpeed: 10
 spriteOrder: 296
 extraInfo: -
 path: -
