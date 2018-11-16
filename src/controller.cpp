@@ -175,6 +175,6 @@ bool GameController::drawCurrentMap()
 GameController::GameController(sf::RenderWindow &window):
 	window(window)
 {
-  characterView.setSize(32.f * 20, 32.f * 19);
+  characterView.zoom(0.65f);
 	currentMapObject = new GameMap(this, window);
 }
