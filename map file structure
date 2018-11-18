@@ -1,0 +1,25 @@
+<map size x> <map size y> <map name>
+<type><id>
+<x> <y> <x> <y> <x> <y>
+
+<type><id>
+<x> <y> <x> <y>
+
+...
+
+type:
+  0 - bg
+  1 - fg
+  2 - sprite
+
+*note: all values are unsigned shorts except ids which are ints
+_______
+
+sprites:
+
+<id> <file name>
+  <int props>
+  <sprite sheet place>
+  <sprite order>
+  <extra info>
+  <path>

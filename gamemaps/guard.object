@@ -2,7 +2,7 @@ movable: 1
 solid: 1
 animated: 0
 selfMoving: 1
-moveWithKeys: 1
+moveWithKeys: 0
 wander: 1
 movingSpaceX: 10
 movingSpaceY: 10
