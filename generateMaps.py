@@ -106,31 +106,28 @@ for level in xrange(0, len(mapNames)):
     for id in objects['maps']:
         f.write(struct.pack("H", 0))
         f.write(struct.pack("I", int(id)))
-        f.write('\n')
+        f.write(struct.pack("H", len(objects['maps'][id])))
 
         for coord in objects['maps'][id]:
             f.write(struct.pack("H", int(coord[0])))
             f.write(struct.pack("H", int(coord[1])))
-        f.write('\n');
 
     for id in objects['layers']:
         f.write(struct.pack("H", 1))
         f.write(struct.pack("I", int(id)))
-        f.write('\n')
+        f.write(struct.pack("H", len(objects['layers'][id])))
 
         for coord in objects['layers'][id]:
             f.write(struct.pack("H", int(coord[0])))
             f.write(struct.pack("H", int(coord[1])))
-        f.write('\n')
 
     for id in objects['sprites']:
         f.write(struct.pack("H", 2))
         f.write(objects['sprites'][id]['id'])
-        f.write('\n')
+        f.write(struct.pack("H", len(objects['sprites'][id]['coords'])))
 
         for coord in objects['sprites'][id]['coords']:
             f.write(struct.pack("H", int(coord[0])))
             f.write(struct.pack("H", int(coord[1])))
-        f.write('\n');
 
     f.close()

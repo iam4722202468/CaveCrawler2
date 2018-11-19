@@ -4,7 +4,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "../gameClasses/object.hpp"
+#include "../gameObjects/object.hpp"
 
 class GameMap;
 

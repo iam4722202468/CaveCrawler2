@@ -21,7 +21,7 @@ maps:
 	python generateMaps.py
 
 main-objects: maps
-	cd gameClasses; make --no-print-directory
+	cd gameObjects; make --no-print-directory
 	@$(MAKE) --no-print-directory main
 
 main: $(OBJ)

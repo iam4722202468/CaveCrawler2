@@ -12,9 +12,7 @@ class GameObject
 {
 	virtual bool onContact(GameObject *contacted) = 0;
 
-	GameObject(GameController *game,
-    sf::RenderWindow& window
-  );
+	GameObject(GameController *game, sf::RenderWindow& window);
 };
 
 #endif
